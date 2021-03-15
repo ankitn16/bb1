@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" margin="auto">
+<title>Cross word Puzzel</title>
+
+
+
+
+</head>
+<body onload="initializeScreen()">
+
+<audio id="myAudio">
+  <source src="Meet-You-ThereSapajou-No-Copyright-Music.ogg" type="audio/ogg">
+  <source src="Meet-You-ThereSapajou-No-Copyright-Music.mp3" type="audio/mpeg">
+</audio>
+
+
+
+<style>
+
+
+
+body {
+  font-family: "Lato", sans-serif; margin:0;background-image: url('back.jpg');
+}
+
+
+
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  
+  top: 0;
+  width: 100%;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+
+
+
+
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: green;
+  color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+  color: #f1f1f1;
+}
+
+/* Style the sidenav links and the dropdown button */
+.dropdown-btn {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#cross{
+	text-align: center;
+	width:30px;
+	height:30px;
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+	border: 0px solid white;
+}
+#buttons{
+	width:30%;
+	float: right;
+}
+tr{
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+}
+td{
+	height: 10px;
+	width: 10px;
+}
+#leftBox{
+	float: center;
+	
+}
+#rightBox{
+	float: center;
+	clear: center;
+		
+}
+.butt{
+	width: 120px;
+	
+	border-radius: 30px;
+	padding: 8px 24px;
+	background-color: #287a2b;
+ 	 border: none;
+ 	 color: white;
+ 	 padding: 12px;
+ 	 text-align: center;
+ 	 text-decoration: none;
+ 	 display: inline-block;
+ 	 font-size: 17px;
+ 	 margin: 4px 2px;
+ 	 cursor: pointer;
+}
+#puzzel{
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+	border: 0px solid white;
+
+
+}
+.inputBox{
+		width: 20px;
+		height:20px;
+		border: 5px solid grey;
+		text-align: center;
+		
+		
+}
+#hintsTable{
+	width: 100%;
+	float: center;
+	clear: center;
+	font-family: arial, sans-serif;
+	padding: 4px;
+}
+
+html, body {
+  background-image: url('552581.jpg');
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+
+.name {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+
+</style>
+
+
+
+<script>
+var x = document.getElementById("myAudio"); 
+
+function playAudio() { 
+  x.play(); 
+} 
+</script>
+
+
+
+<script>
+
+//Globals
+var currentTextInput;
+var puzzelArrayData;
+//Loads the Crossword
+function initializeScreen(){
+	var puzzelTable = document.getElementById("puzzel");
+	puzzelArrayData = preparePuzzelArray();
+	for ( var i = 0; i < puzzelArrayData.length ; i++ ) {
+		var row = puzzelTable.insertRow(-1);
+		var rowData = puzzelArrayData[i];
+		for(var j = 0 ; j < rowData.length ; j++){
+			var cell = row.insertCell(-1);
+			if(rowData[j] != 0){
+				var txtID = String('txt' + '_' + i + '_' + j);
+				cell.innerHTML = '<input type="text" class="inputBox" maxlength="1" style="text-transform: lowercase" ' + 'id="' + txtID + '" onfocus="textInputFocus(' + "'" + txtID + "'"+ ')">';
+			}else{
+	
+				cell.style.backgroundImage  = "552581.jpg";
+			}
+		}
+	}
+	addHint();
+}
+//Adds the hint numbers
+function addHint(){
+	document.getElementById("txt_1_0").placeholder = "1";
+	document.getElementById("txt_3_3").placeholder = "2";
+	document.getElementById("txt_6_2").placeholder = "3";
+	document.getElementById("txt_8_3").placeholder = "4";
+	document.getElementById("txt_0_3").placeholder = "5";
+	document.getElementById("txt_2_5").placeholder = "6";
+	document.getElementById("txt_6_3").placeholder = "7";
+	document.getElementById("txt_7_6").placeholder = "8";
+}
+//Stores ID of the selected cell into currentTextInput
+function textInputFocus(txtID123){
+	currentTextInput = txtID123;
+}
+//Returns Array
+function preparePuzzelArray(){
+var items = [	
+
+[0,0,0,'s',0,0,0,0],
+['r','o','o','t',0,0,0,0],
+[0,0,0,'e',0,'p',0,0],
+[0,0,0,'m','i','l','k',0],
+[0,0,0,0,0,'a',0,0],
+[0,0,0,0,0,'n',0,0],
+[0,0,'m','e','a','t',0,0],
+[0,0,0,'g',0,0,'o',0],
+[0,0,0,'g','r','a','i','n'],
+[0,0,0,'s',0,0,'l',0]
+
+			];
+return items;
+}
+//Clear All Button
+function clearAllClicked(){
+	currentTextInput = '';
+	var puzzelTable = document.getElementById("puzzel");
+	puzzelTable.innerHTML = '';
+    initializeScreen();
+}
+
+
+
+//Check button
+function checkClicked(){
+	for ( var i = 0; i < puzzelArrayData.length ; i++ ) {
+		var rowData = puzzelArrayData[i];
+		for(var j = 0 ; j < rowData.length ; j++){
+			if(rowData[j] != 0){
+				var selectedInputTextElement = document.getElementById('txt' + '_' + i + '_' + j);
+				if(selectedInputTextElement.value != puzzelArrayData[i][j]){
+					selectedInputTextElement.style.backgroundColor = 'red';
+
+				}
+					else{
+					selectedInputTextElement.style.backgroundColor = '#ADFF2F';
+					
+					
+
+				}
+			}
+		}
+	}
+}
+//Clue Button
+function clueClicked(){
+	if (currentTextInput != null){
+		var temp1 = currentTextInput;
+		var token = temp1.split("_");
+		var row = token[1];
+		var column = token[2];
+		document.getElementById(temp1).value = puzzelArrayData[row][column];
+		//checkClicked();
+	}
+}
+//Solve Button
+function solveClicked(){
+	if (currentTextInput != null){
+		var temp1 = currentTextInput;
+		var token = temp1.split("_");
+		var row = token[1];
+		var column = token[2];
+		
+		// Print elements on top
+		for(j = row; j >= 0; j--){
+			if(puzzelArrayData[j][column] != 0){
+				document.getElementById('txt' + '_' + j + '_' + column).value = puzzelArrayData[j][column];
+				}else break;
+		}
+		// Print elements on right
+		for(i = column; i< puzzelArrayData[row].length; i++){
+			if(puzzelArrayData[row][i] != 0){
+				document.getElementById('txt' + '_' + row + '_' + i).value = puzzelArrayData[row][i];
+				}else break;
+		}
+		
+		// Print elements below
+		for(m = row; m< puzzelArrayData.length; m++){
+			if(puzzelArrayData[m][column] != 0){
+				document.getElementById('txt' + '_' + m + '_' + column).value = puzzelArrayData[m][column];
+				}else break;
+		}
+		// Print elements on left
+		for(k = column; k >= 0; k--){
+			if(puzzelArrayData[row][k] != 0){
+				document.getElementById('txt' + '_' + row + '_' + k).value = puzzelArrayData[row][k];
+				}else break;
+		}
+		// Done!
+		
+	}
+}
+
+
+
+
+</script>
+
+
+
+
+
+
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+
+
+
+<script>
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+  this.classList.toggle("active");
+  var dropdownContent = this.nextElementSibling;
+  if (dropdownContent.style.display === "block") {
+  dropdownContent.style.display = "none";
+  } else {
+  dropdownContent.style.display = "block";
+  }
+  });
+}
+</script>
+
+
+
+
+
+
+<ul>
+  <li><a class="active" style="cursor:pointer" onclick="openNav()">Contents</a></li>
+  <li><a href="#news">Home</a></li>
+  <li><a href="#contact">Courses</a></li>
+  <li><a href="#about">News</a></li>
+  <li><a href="#about">Exam Update</a></li>
+  <li><a href="#about">About us</a></li>
+  <li><a href="#about">Contact</a></li>
+</ul>
+
+
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">Cell Biology</a>
+  <a href="#">Human Anatomy</a>
+  <a href="#">Human Physiology</a>
+  <a href="#">Plant Physiology</a>
+  <a href="#">Plant Anatomy</a>
+
+
+<button class="dropdown-btn">Quiz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9776;
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#">Crosswords</a>
+    <a href="#">MCQs</a>
+    <a href="#">Flashcards</a>
+  </div>
+
+
+</div>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+<div id="leftBox">
+<center><table id="puzzel"></center>
+
+</table>
+</div>
+<div id="rightBox">
+</div>
+<br><br>
+
+<center><button class="butt"  type="submit" value="Clear All" onclick="clearAllClicked()">Clear All</button>
+	<button class="butt"  type="submit" value="Check" onclick="checkClicked()">Check</button>
+	<button class="butt"  type="submit" value="Solve" onclick="solveClicked()">Solve</button>
+	<button class="butt"  type="submit" value="Clue" onclick="clueClicked()">Clue</button>
+</center>
+
+<br><br>
+
+<center><table id="hintsTable" style="color:black">
+		<tr>
+			<td><strong>Across:</strong></td><td><strong>Down:</strong></td>
+		</tr>
+		<tr>
+			<td>1. The underground part of a plant.</td><td>5. Main stalk of a plant.</td>
+		</tr>									
+		<tr>
+			<td>2. Animal product derived from cows and buffaloes. </td><td>6. Source of fruits and vegetables. </td>
+		</tr> 
+		<tr>
+			<td>3. Animal flesh eaten as food.</td><td>7. This food item is obtained from animals.</td>
+		</tr>
+
+		<tr>
+			<td>4. Cereals and legumes are type of ___. </td><td>8. The common ingredient in any dish which is extracted from seeds.</td>
+		</tr>
+
+</table></center>
+
+
+
+
+
+
+
+<br><br>
+<br><br>
+
+
+
+</body>
+</html>
